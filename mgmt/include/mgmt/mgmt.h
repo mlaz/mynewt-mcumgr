@@ -21,7 +21,12 @@
 #define H_MGMT_MGMT_
 
 #include <inttypes.h>
+
+#ifdef __ZEPHYR__
+#include <cbor.h>
+#else
 #include "tinycbor/cbor.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -19,7 +19,13 @@
 
 #include <assert.h>
 #include <string.h>
+
+#ifdef __ZEPHYR__
+#include <cbor.h>
+#else
 #include "tinycbor/cbor.h"
+#endif
+
 #include "cborattr/cborattr.h"
 #include "mgmt/mgmt.h"
 #include "os_mgmt/os_mgmt.h"

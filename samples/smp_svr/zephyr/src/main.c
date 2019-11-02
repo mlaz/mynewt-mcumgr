@@ -18,6 +18,7 @@
 #ifdef CONFIG_MCUMGR_CMD_FS_MGMT
 #include <device.h>
 #include <fs.h>
+#include <nffs/nffs.h>
 #include "fs_mgmt/fs_mgmt.h"
 #endif
 #ifdef CONFIG_MCUMGR_CMD_OS_MGMT

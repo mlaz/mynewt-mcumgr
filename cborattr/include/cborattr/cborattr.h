@@ -26,7 +26,12 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <sys/types.h>
+
+#ifdef __ZEPHYR__
+#include <cbor.h>
+#else
 #include "tinycbor/cbor.h"
+#endif
 
 #ifdef MYNEWT
 #include <os/os_mbuf.h>

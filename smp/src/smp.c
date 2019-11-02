@@ -22,10 +22,15 @@
 #include <assert.h>
 #include <string.h>
 
+#ifdef __ZEPHYR__
+#include <cbor.h>
+#else
+#include "tinycbor/cbor.h"
+#endif
+
 #include "mgmt/endian.h"
 #include "mgmt/mgmt.h"
 #include "smp/smp.h"
-#include "tinycbor/cbor.h"
 
 static int
 smp_align4(int x)
