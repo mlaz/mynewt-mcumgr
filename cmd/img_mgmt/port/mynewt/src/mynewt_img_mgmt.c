@@ -387,54 +387,6 @@ img_mgmt_impl_read(int slot, unsigned int offset, void *dst,
     return 0;
 }
 
-#if MYNEWT_VAL(IMG_MGMT_LAZY_ERASE)
-int
-img_mgmt_impl_write_image_data(unsigned int offset, const void *data,
-                               unsigned int num_bytes, bool last)
-{
-    const struct flash_area *fa;
-    struct flash_area sector;
-    int rc;
-
-    rc = flash_area_open(FLASH_AREA_IMAGE_1, &fa);
-    if (rc != 0) {
-        return MGMT_ERR_EUNKNOWN;
-    }
-
-    /* Check if there any unerased target sectors, if not clean them. */
-    while ((fa->fa_off + offset + num_bytes) > g_img_mgmt_state.sector_end) {
-        rc = flash_area_getnext_sector(fa->fa_id, &g_img_mgmt_state.sector_id,
-                                       &sector);
-        if (rc) {
-            goto err;
-        }
-        rc = flash_area_erase(&sector, 0, sector.fa_size);
-        if (rc) {
-            goto err;
-        }
-        g_img_mgmt_state.sector_end = sector.fa_off + sector.fa_size;
-    }
-
-    if (last) {
-        g_img_mgmt_state.sector_id = -1;
-        g_img_mgmt_state.sector_end = 0;
-    }
-
-    rc = flash_area_write(fa, offset, data, num_bytes);
-    flash_area_close(fa);
-    if (rc != 0) {
-        return MGMT_ERR_EUNKNOWN;
-    }
-
-    return 0;
-
-err:
-    g_img_mgmt_state.sector_id = -1;
-    g_img_mgmt_state.sector_end = 0;
-    return MGMT_ERR_EUNKNOWN;
-}
-
-#else
 int
 img_mgmt_impl_write_image_data(unsigned int offset, const void *data,
                                unsigned int num_bytes, bool last)
