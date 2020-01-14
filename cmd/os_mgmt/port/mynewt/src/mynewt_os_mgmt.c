@@ -47,8 +47,8 @@ mynewt_os_mgmt_stack_usage(const struct os_task *task)
     const os_stack_t *bottom;
     const os_stack_t *top;
 
-    top = task->t_stacktop;
-    bottom = task->t_stacktop - task->t_stacksize;
+    bottom = task->t_stackbottom;
+    top = bottom + task->t_stacksize;
     while (bottom < top) {
         if (*bottom != OS_STACK_PATTERN) {
             break;
@@ -56,7 +56,7 @@ mynewt_os_mgmt_stack_usage(const struct os_task *task)
         ++bottom;
     }
 
-    return task->t_stacktop - bottom;
+    return top - bottom;
 }
 
 static const struct os_task *
